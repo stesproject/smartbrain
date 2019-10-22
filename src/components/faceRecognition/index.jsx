@@ -6,7 +6,7 @@ function FaceRecognition(props) {
 
   return (
     <div className="center ma">
-      <div className="absolute mt2">
+      <div id="inputimage" className="absolute mt2">
         <img className="rec-image shadow-5" src={imageUrl} alt="" />
       </div>
     </div>
