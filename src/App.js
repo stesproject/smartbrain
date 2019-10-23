@@ -4,12 +4,17 @@ import Logo from "./components/logo";
 import ImageLinkForm from "./components/imageLinkForm";
 import Rank from "./components/rank";
 import FaceRecognition from "./components/faceRecognition";
+import Signin from "./components/signin";
+import Register from "./components/register";
 import Particles from "react-particles-js";
 import Clarifai from "clarifai";
+import particlesOptions from "./assets/ParticlesOptions.json";
 import "./App.css";
 
 function App() {
   const [imageUrl, setImageUrl] = useState("");
+  const [route, setRoute] = useState("signin");
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const app = new Clarifai.App({
     apiKey: process.env.REACT_APP_API_KEY
@@ -63,29 +68,34 @@ function App() {
       .catch(err => console.log("err", err));
   };
 
-  const particlesOptions = {
-    particles: {
-      number: {
-        value: 200,
-        density: {
-          enable: true,
-          value_area: 800
-        }
-      }
+  const onRouteChange = route => {
+    if (route === "signout") {
+      setIsSignedIn(false);
+    } else if (route === "home") {
+      setIsSignedIn(true);
     }
+    setRoute(route);
   };
 
   return (
     <div className="App">
       <Particles className="particles" params={particlesOptions} />
-      <Navigation />
-      <Logo />
-      <Rank />
-      <ImageLinkForm
-        onInputBlur={onInputBlur}
-        onButtonSubmit={onButtonSubmit}
-      />
-      <FaceRecognition imageUrl={imageUrl} />
+      <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
+      {route === "home" ? (
+        <>
+          <Logo />
+          <Rank />
+          <ImageLinkForm
+            onInputBlur={onInputBlur}
+            onButtonSubmit={onButtonSubmit}
+          />
+          <FaceRecognition imageUrl={imageUrl} />
+        </>
+      ) : route === "signin" ? (
+        <Signin onRouteChange={onRouteChange} />
+      ) : (
+        <Register onRouteChange={onRouteChange} />
+      )}
     </div>
   );
 }
