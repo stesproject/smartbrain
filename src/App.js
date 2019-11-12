@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navigation from "./components/navigation";
 import Logo from "./components/logo";
 import ImageLinkForm from "./components/imageLinkForm";
@@ -19,6 +19,12 @@ function App() {
   const app = new Clarifai.App({
     apiKey: process.env.REACT_APP_API_KEY
   });
+
+  useEffect(() => {
+    fetch("http://localhost:8000")
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }, []);
 
   const resetBoxes = () => {
     const imageContainer = document.getElementById("inputimage");
