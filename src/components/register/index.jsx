@@ -1,7 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Register(props) {
-  const { onRouteChange } = props;
+  const { onRouteChange, loadUser } = props;
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onNameChange = e => {
+    setName(e.target.value);
+  };
+
+  const onEmailChange = e => {
+    setEmail(e.target.value);
+  };
+
+  const onPasswordChange = e => {
+    setPassword(e.target.value);
+  };
+
+  const onSubmitSignin = e => {
+    fetch("http://localhost:8000/register", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password
+      })
+    })
+      .then(response => response.json())
+      .then(user => {
+        if (user) {
+          loadUser(user);
+          onRouteChange("home");
+        }
+      });
+  };
 
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
@@ -18,6 +52,7 @@ function Register(props) {
                 type="text"
                 name="name"
                 id="name"
+                onBlur={onNameChange}
               />
             </div>
             <div className="mt3">
@@ -29,6 +64,7 @@ function Register(props) {
                 type="email"
                 name="email-address"
                 id="email-address"
+                onBlur={onEmailChange}
               />
             </div>
             <div className="mv3">
@@ -40,12 +76,13 @@ function Register(props) {
                 type="password"
                 name="password"
                 id="password"
+                onBlur={onPasswordChange}
               />
             </div>
           </fieldset>
           <div className="">
             <input
-              onClick={() => onRouteChange("home")}
+              onClick={onSubmitSignin}
               className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
               type="submit"
               value="Register"

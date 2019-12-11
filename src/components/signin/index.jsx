@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 function Signin(props) {
-  const { onRouteChange } = props;
+  const { onRouteChange, loadUser } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,8 +23,9 @@ function Signin(props) {
       })
     })
       .then(response => response.json())
-      .then(data => {
-        if (data === "success") {
+      .then(user => {
+        if (user.id) {
+          loadUser(user);
           onRouteChange("home");
         }
       });

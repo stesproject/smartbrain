@@ -1,10 +1,12 @@
 import React from "react";
 
-function Rank() {
+function Rank(props) {
+  const { name, entries } = props;
+
   return (
     <div>
-      <div className="white f3">{"Ste, your current rank is:"}</div>
-      <div className="white f1">{"#1"}</div>
+      <div className="white f3">{`${name}, your current rank is:`}</div>
+      <div className="white f1">{entries}</div>
     </div>
   );
 }
